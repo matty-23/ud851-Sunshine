@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                 "Sunny",
                 "Cloudy"
         };
-        
+
         for (String weather : weatherData) {
 
             mWeatherDisplayTV.append(weather + "\n\n\n");
