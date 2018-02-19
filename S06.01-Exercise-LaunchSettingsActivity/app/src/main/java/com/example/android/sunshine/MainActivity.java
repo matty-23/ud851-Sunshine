@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
         }
-        
+
         return super.onOptionsItemSelected(item);
     }
 }
