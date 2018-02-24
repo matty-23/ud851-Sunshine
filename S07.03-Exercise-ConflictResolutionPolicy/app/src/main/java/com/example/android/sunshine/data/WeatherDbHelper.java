@@ -72,7 +72,7 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                  */
                 WeatherEntry._ID               + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
 
-                WeatherEntry.COLUMN_DATE       + " INTEGER NOT NULL UNIQUE, "                 +
+                WeatherEntry.COLUMN_DATE       + " INTEGER NOT NULL, "                 +
 
                 WeatherEntry.COLUMN_WEATHER_ID + " INTEGER NOT NULL, "                 +
 
@@ -83,7 +83,8 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
                 WeatherEntry.COLUMN_PRESSURE   + " REAL NOT NULL, "                    +
 
                 WeatherEntry.COLUMN_WIND_SPEED + " REAL NOT NULL, "                    +
-                WeatherEntry.COLUMN_DEGREES    + " REAL NOT NULL" + ");";
+                WeatherEntry.COLUMN_DEGREES    + " REAL NOT NULL,"                     +
+                " UNIQUE (" + WeatherEntry.COLUMN_DATE + " ) ON CONFLICT REPLACE ) ;";
         /*
          * After we've spelled out our SQLite table creation statement above, we actually execute
          * that SQL with the execSQL method of our SQLite database object.
