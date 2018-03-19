@@ -312,7 +312,10 @@ public class WeatherProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         switch (match) {
             case CODE_WEATHER:
-                rowsDeleted = db.delete(TABLE_NAME, null, null);
+                if(selection == null) {
+                    selection = "1";
+                }
+                rowsDeleted = db.delete(TABLE_NAME, selection, selectionArgs);
                 break;
 
             default:
@@ -320,7 +323,6 @@ public class WeatherProvider extends ContentProvider {
         }
 
         if(rowsDeleted != 0) {
-
             getContext().getContentResolver().notifyChange(uri, null);
         }
 
