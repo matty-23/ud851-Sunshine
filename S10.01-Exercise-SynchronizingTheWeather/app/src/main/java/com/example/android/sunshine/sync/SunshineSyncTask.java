@@ -14,7 +14,7 @@ import com.example.android.sunshine.utilities.SunshineWeatherUtils;
 public class SunshineSyncTask {
 
     synchronized public static void syncWeather(Context context) {
-        
+
         try {
 
             String jsonWeatherResponse = NetworkUtils.getResponseFromHttpUrl(NetworkUtils.getUrl(context));
