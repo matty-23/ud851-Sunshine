@@ -101,10 +101,10 @@ public class NotificationUtils {
             Intent intentToStartDetailActivity = new Intent(context, DetailActivity.class);
             intentToStartDetailActivity.setData(todaysWeatherUri);
 
-            TaskStackBuilder taskTask = TaskStackBuilder.create(context)
+            TaskStackBuilder taskStackBuilder = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(intentToStartDetailActivity);
 
-            PendingIntent pendingIntent = taskTask.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
+            PendingIntent pendingIntent = taskStackBuilder.getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
 
             notification.setContentIntent(pendingIntent);
 
