@@ -18,9 +18,16 @@ package com.example.android.sunshine.sync;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.text.format.DateUtils;
+import android.util.Log;
 
+import com.example.android.sunshine.R;
+import com.example.android.sunshine.data.SunshinePreferences;
 import com.example.android.sunshine.data.WeatherContract;
 import com.example.android.sunshine.utilities.NetworkUtils;
+import com.example.android.sunshine.utilities.NotificationUtils;
 import com.example.android.sunshine.utilities.OpenWeatherJsonUtils;
 
 import java.net.URL;
@@ -73,11 +80,27 @@ public class SunshineSyncTask {
                         WeatherContract.WeatherEntry.CONTENT_URI,
                         weatherValues);
 
-//              TODO (13) Check if notifications are enabled
+                String notificationPreferenceKey = context.getString(R.string.pref_enable_notifications_key);
 
-//              TODO (14) Check if a day has passed since the last notification
+                boolean defaultNotification = context.getResources().getBoolean(R.bool.bool_show_notification_default);
 
-//              TODO (15) If more than a day have passed and notifications are enabled, notify the user
+                SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+
+                boolean notificationsEnabled = sharedPreferences.getBoolean(notificationPreferenceKey, defaultNotification);
+
+                if (notificationsEnabled) {
+
+                    Log.i("tag", "notifications enabled");
+                    long lastNotificationTime = SunshinePreferences.getEllapsedTimeSinceLastNotification(context);
+
+                    if (lastNotificationTime >= DateUtils.DAY_IN_MILLIS) {
+
+                        Log.i("tag", "over a day");
+                        NotificationUtils.notifyUserOfNewWeather(context);
+                    } else {
+                        Log.i("tag", "not over a day");
+                    }
+                }
 
             /* If the code reaches this point, we have successfully performed our sync */
 
