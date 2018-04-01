@@ -2,9 +2,10 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
+        vectorDrawables.useSupportLibrary = true
         applicationId "com.example.android.sunshine"
         minSdkVersion 10
         targetSdkVersion 25
@@ -28,7 +29,9 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.0.1'
     compile 'com.android.support:preference-v7:25.0.1'
 
-//  TODO (1) Add the ConstraintLayout dependency to your project
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    
+
 
     compile 'com.firebase:firebase-jobdispatcher:0.5.0'
 
