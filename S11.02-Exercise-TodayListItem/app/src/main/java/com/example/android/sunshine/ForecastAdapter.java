@@ -34,13 +34,10 @@ import com.example.android.sunshine.utilities.SunshineWeatherUtils;
  */
 class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapterViewHolder> {
 
-//  TODO (1) Add a layout called list_item_forecast_today
-//  TODO (2) Using ConstraintLayout, implement the today list item layout
 
-//  TODO (4) Create a resources file called bools.xml within the res/values-port directory
-//  TODO (5) Within bools.xml in the portrait specific directory, add a bool called use_today_layout and set it to false
+    private static final int ID_TODAY = 0;
+    private static final int ID_FUTURE = 1;
 
-//  TODO (6) Declare constant IDs for the ViewType for today and for a future day
 
     /* The context we use to utility methods, app resources and layout inflaters */
     private final Context mContext;
@@ -66,7 +63,8 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
      * is in landscape. This flag will be set in the constructor of the adapter by accessing
      * boolean resources.
      */
-//  TODO (7) Declare a private boolean called mUseTodayLayout
+
+    private boolean mUseTodayLayout;
 
     private Cursor mCursor;
 
@@ -80,7 +78,7 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     public ForecastAdapter(@NonNull Context context, ForecastAdapterOnClickHandler clickHandler) {
         mContext = context;
         mClickHandler = clickHandler;
-//      TODO (8) Set mUseTodayLayout to the value specified in resources
+        mUseTodayLayout = mContext.getResources().getBoolean(R.bool.use_today_layout);
     }
 
     /**
@@ -97,15 +95,20 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
     @Override
     public ForecastAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
 
-//      TODO (12) If the view type of the layout is today, use today layout
 
-//      TODO (13) If the view type of the layout is future day, use future day layout
+        int layout;
 
-//      TODO (14) Otherwise, throw an IllegalArgumentException
+        if (viewType == ID_TODAY) {
+            layout = R.layout.list_item_forecast_today;
+        } else if(viewType == ID_FUTURE) {
+            layout = R.layout.forecast_list_item;
+        } else {
+            throw new IllegalArgumentException("Invalid viewtype");
+        }
 
         View view = LayoutInflater
                 .from(mContext)
-                .inflate(R.layout.forecast_list_item, viewGroup, false);
+                .inflate(layout, viewGroup, false);
 
         return new ForecastAdapterViewHolder(view);
     }
@@ -130,71 +133,72 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         int weatherId = mCursor.getInt(MainActivity.INDEX_WEATHER_CONDITION_ID);
         int weatherImageId;
 
-//      TODO (15) If the view type of the layout is today, display a large icon
+        int viewType = getItemViewType(position);
 
-//      TODO (16) If the view type of the layout is future day, display a small icon
-
-//      TODO (17) Otherwise, throw an IllegalArgumentException
-
-        weatherImageId = SunshineWeatherUtils
-                .getSmallArtResourceIdForWeatherCondition(weatherId);
+        if(viewType == ID_TODAY) {
+            weatherImageId = SunshineWeatherUtils.getLargeArtResourceIdForWeatherCondition(weatherId);
+        } else if(viewType == ID_FUTURE) {
+            weatherImageId = SunshineWeatherUtils.getSmallArtResourceIdForWeatherCondition(weatherId);
+        } else {
+            throw new IllegalArgumentException("Invalid viewType");
+        }
 
         forecastAdapterViewHolder.iconView.setImageResource(weatherImageId);
 
         /****************
          * Weather Date *
          ****************/
-         /* Read date from the cursor */
+        /* Read date from the cursor */
         long dateInMillis = mCursor.getLong(MainActivity.INDEX_WEATHER_DATE);
-         /* Get human readable string using our utility method */
+        /* Get human readable string using our utility method */
         String dateString = SunshineDateUtils.getFriendlyDateString(mContext, dateInMillis, false);
 
-         /* Display friendly date string */
+        /* Display friendly date string */
         forecastAdapterViewHolder.dateView.setText(dateString);
 
         /***********************
          * Weather Description *
          ***********************/
         String description = SunshineWeatherUtils.getStringForWeatherCondition(mContext, weatherId);
-         /* Create the accessibility (a11y) String from the weather description */
+        /* Create the accessibility (a11y) String from the weather description */
         String descriptionA11y = mContext.getString(R.string.a11y_forecast, description);
 
-         /* Set the text and content description (for accessibility purposes) */
+        /* Set the text and content description (for accessibility purposes) */
         forecastAdapterViewHolder.descriptionView.setText(description);
         forecastAdapterViewHolder.descriptionView.setContentDescription(descriptionA11y);
 
         /**************************
          * High (max) temperature *
          **************************/
-         /* Read high temperature from the cursor (in degrees celsius) */
+        /* Read high temperature from the cursor (in degrees celsius) */
         double highInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MAX_TEMP);
-         /*
-          * If the user's preference for weather is fahrenheit, formatTemperature will convert
-          * the temperature. This method will also append either °C or °F to the temperature
-          * String.
-          */
+        /*
+         * If the user's preference for weather is fahrenheit, formatTemperature will convert
+         * the temperature. This method will also append either °C or °F to the temperature
+         * String.
+         */
         String highString = SunshineWeatherUtils.formatTemperature(mContext, highInCelsius);
-         /* Create the accessibility (a11y) String from the weather description */
+        /* Create the accessibility (a11y) String from the weather description */
         String highA11y = mContext.getString(R.string.a11y_high_temp, highString);
 
-         /* Set the text and content description (for accessibility purposes) */
+        /* Set the text and content description (for accessibility purposes) */
         forecastAdapterViewHolder.highTempView.setText(highString);
         forecastAdapterViewHolder.highTempView.setContentDescription(highA11y);
 
         /*************************
          * Low (min) temperature *
          *************************/
-         /* Read low temperature from the cursor (in degrees celsius) */
+        /* Read low temperature from the cursor (in degrees celsius) */
         double lowInCelsius = mCursor.getDouble(MainActivity.INDEX_WEATHER_MIN_TEMP);
-         /*
-          * If the user's preference for weather is fahrenheit, formatTemperature will convert
-          * the temperature. This method will also append either °C or °F to the temperature
-          * String.
-          */
+        /*
+         * If the user's preference for weather is fahrenheit, formatTemperature will convert
+         * the temperature. This method will also append either °C or °F to the temperature
+         * String.
+         */
         String lowString = SunshineWeatherUtils.formatTemperature(mContext, lowInCelsius);
         String lowA11y = mContext.getString(R.string.a11y_low_temp, lowString);
 
-         /* Set the text and content description (for accessibility purposes) */
+        /* Set the text and content description (for accessibility purposes) */
         forecastAdapterViewHolder.lowTempView.setText(lowString);
         forecastAdapterViewHolder.lowTempView.setContentDescription(lowA11y);
     }
@@ -211,9 +215,14 @@ class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapt
         return mCursor.getCount();
     }
 
-//  TODO (9) Override getItemViewType
-//      TODO (10) Within getItemViewType, if mUseTodayLayout is true and position is 0, return the ID for today viewType
-//      TODO (11) Otherwise, return the ID for future day viewType
+    @Override
+    public int getItemViewType(int position) {
+        if (mUseTodayLayout && position == 0) {
+            return ID_TODAY;
+        } else {
+            return ID_FUTURE;
+        }
+    }
 
     /**
      * Swaps the cursor used by the ForecastAdapter for its weather data. This method is called by
