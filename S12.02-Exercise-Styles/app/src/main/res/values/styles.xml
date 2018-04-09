@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
      Copyright (C) 2016 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,12 +24,29 @@
         <item name="preferenceTheme">@style/PreferenceThemeOverlay</item>
     </style>
 
-    <!-- TODO (1) Create a style that shows a Sunshine logo instead of a title -->
+    <style name="SunshineLogo" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
 
-    <!-- TODO (2) Create a style for MainActivity called AppTheme.Forecast that uses our custom ActionBar style -->
+        <item name="displayOptions">useLogo|showHome</item>
+        <item name="logo">@drawable/ic_logo</item>
+    </style>
 
-    <!-- TODO (3) Create the DetailLabel style -->
+    <style name="AppTheme.Forecast" parent="@style/AppTheme">
+        <item name="actionBarStyle">@style/SunshineLogo</item>
+    </style>
 
-    <!-- TODO (4) Create the ExtraWeatherMeasurement style -->
+
+    <style name ="DetailLabel" parent="@style/TextAppearance.AppCompat.Title">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/detail_accent_label</item>
+        <item name="android:fontFamily">sans-serif</item>
+
+    </style>
+
+    <style name ="ExtraWeatherMeasurement" parent ="@style/TextAppearance.AppCompat.Headline">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 
 </resources>
